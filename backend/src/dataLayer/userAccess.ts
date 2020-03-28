@@ -43,30 +43,28 @@ export class UserAccess {
     return items as UserItem[]
   }
 
-  async deleteUser(UserId: string, userId: string) {
+  async deleteUser(userId: string) {
     const response = await this.docClient.delete({
       TableName: this.usersTable,
       Key: {
         userId,
-        UserId
       }
     }).promise()
 
     return response
   }
 
-  async updateUser(UserId: string, userId: string, UserUpdate: UserUpdate): Promise<UserUpdate> {
+  async updateUser(userId: string, UserUpdate: UserUpdate): Promise<UserUpdate> {
     const params = {
       TableName: this.usersTable,
       Key: {
-        UserId,
         userId,
       },
-      UpdateExpression: "set name = :name, dueDate = :dueDate , done = :done",
+      UpdateExpression: "set geolocation = :geolocation, status = :status , tests = :tests",
       ExpressionAttributeValues: {
-        ":name": UserUpdate.name,
-        ":dueDate": UserUpdate.dueDate,
-        ":done": UserUpdate.done
+        ":geolocation": UserUpdate.geolocation,
+        ":status": UserUpdate.status,
+        ":tests": UserUpdate.tests
       },
       ReturnValues: "UPDATED_NEW"
     };
@@ -75,12 +73,11 @@ export class UserAccess {
     return UserUpdate
   }
 
-  async getUserById(UserId: string, userId: string): Promise<UserItem> {
+  async getUserById(userId: string): Promise<UserItem> {
     const response = await this.docClient.get({
       TableName: this.usersTable,
       Key: {
-        UserId,
-        userId
+        userId,
       }
     }).promise()
 
@@ -98,12 +95,12 @@ export class UserAccess {
     })
   }
 
-  async updateUrl(UserId: string, userId: string, url: string) {
+  async updateUrl(userId: string, url: string) {
     return await this.docClient.update({
       TableName: this.usersTable,
+
       Key: {
-        UserId,
-        userId
+        userId,
       },
       UpdateExpression: 'set attachmentUrl = :uploadUrl',
       ExpressionAttributeValues: {

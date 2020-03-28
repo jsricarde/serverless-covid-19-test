@@ -1,4 +1,4 @@
-import * as uuid from 'uuid'
+// import * as uuid from 'uuid'
 
 import { UserItem } from '../models/UserItem'
 import { UserUpdate } from '../models/UserUpdate'
@@ -19,38 +19,34 @@ export async function createUser(
   event: any
 ): Promise<UserItem> {
 
-  const todoId = uuid.v4()
   const userId = getUserId(event)
 
   return await userAccess.createUser({
     userId,
-    todoId,
     createdAt: (new Date()).toISOString(),
-    done: false,
+    status: 'pending',
+    tests: [],
     ...newUser
   })
 }
 
 export async function updateUser(event: any): Promise<UserUpdate> {
 
-  const { UserId } = event.pathParameters
   const UserUpdate: UpdateUserRequest = JSON.parse(event.body)
   const userId = getUserId(event)
 
-  return await userAccess.updateUser(UserId, userId, UserUpdate)
+  return await userAccess.updateUser(userId, UserUpdate)
 }
 
 export async function deleteUser(event: any) {
-  const { UserId } = event.pathParameters
-  const userId = getUserId(event)
+  const { userId } = event.pathParameters
 
-  return await userAccess.deleteUser(UserId, userId)
+  return await userAccess.deleteUser(userId)
 }
 
-export async function getUserById(UserId: string, event: any) {
-  const userId = getUserId(event)
+export async function getUserById(userId: string) {
 
-  const response = await userAccess.getUserById(UserId, userId)
+  const response = await userAccess.getUserById(userId)
 
   return response
 }
@@ -59,8 +55,7 @@ export function getUploadUrl(UserId: string) {
   return userAccess.getUploadUrl(UserId)
 }
 
-export async function updateUrl(UserId: string, event: any, url: string) {
-  const userId = getUserId(event)
+export async function updateUrl(userId: string, url: string) {
 
-  return await userAccess.updateUrl(UserId, userId, url)
+  return await userAccess.updateUrl(userId, url)
 }
