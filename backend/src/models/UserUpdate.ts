@@ -1,5 +1,7 @@
+import { TestItem } from "./TestItem";
+
 export interface UserUpdate {
-  name: string
-  dueDate: string
-  done: boolean
+  geolocation: object,
+  status: string,
+  tests: Array<TestItem>
 }

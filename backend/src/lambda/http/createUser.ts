@@ -26,7 +26,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       body: JSON.stringify({ message: error })
     }
   }
-  const { todoId } = todoItem
 
   return {
     statusCode: 200,
@@ -35,7 +34,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Credentials': true
     },
     body: JSON.stringify({
-      item: { ...newTodo, todoId }
+      item: { ...newTodo }
     })
   }
 }
