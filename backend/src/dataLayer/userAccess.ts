@@ -2,7 +2,7 @@ import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
-const AWSX = AWSXRay.captureAWS(AWS)
+const XAWS = AWSXRay.captureAWS(AWS)
 
 import { UserItem } from '../models/UserItem'
 import { UserUpdate } from '../models/UserUpdate'
@@ -10,7 +10,7 @@ import { UserUpdate } from '../models/UserUpdate'
 export class UserAccess {
 
   constructor(
-    private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
+    private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly usersTable = process.env.USERS_TABLE,
     private readonly userIdIndex = process.env.USER_ID_INDEX,
     private readonly bucket = process.env.S3_BUCKET,
@@ -86,7 +86,7 @@ export class UserAccess {
 
 
   getUploadUrl(UserId: string) {
-    const s3 = new AWSX.S3({ signatureVersion: 'v4' })
+    const s3 = new XAWS.S3({ signatureVersion: 'v4' })
 
     return s3.getSignedUrl('putObject', {
       Bucket: this.bucket,
@@ -113,3 +113,14 @@ export class UserAccess {
 
 }
 
+function createDynamoDBClient() {
+  if (process.env.IS_OFFLINE) {
+    console.log('Creating a local DynamoDB instance')
+    return new AWS.DynamoDB.DocumentClient({
+      region: 'localhost',
+      endpoint: 'http://localhost:8000'
+    })
+  }
+
+  return new AWS.DynamoDB.DocumentClient()
+}
