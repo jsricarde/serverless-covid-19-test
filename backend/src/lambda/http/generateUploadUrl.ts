@@ -1,14 +1,14 @@
 import 'source-map-support/register'
 import { createLogger } from '../../utils/logger'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { getTodoById, updateUrl, getUploadUrl } from '../../businessLogic/todo';
+import { getUserById, updateUrl, getUploadUrl } from '../../businessLogic/user';
 
 const logger = createLogger('auth')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const { todoId } = event.pathParameters
 
-  const todoExists = await getTodoById(todoId, event)
+  const todoExists = await getUserById(todoId)
 
   if (!todoExists) {
     return {
@@ -21,7 +21,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   }
 
   const uploadUrl = getUploadUrl(todoId)
-  const updateTodoImageUrl = await updateUrl(todoId, event, uploadUrl.split("?")[ 0 ])
+  const updateTodoImageUrl = await updateUrl(todoId, uploadUrl.split("?")[ 0 ])
   logger.info(updateTodoImageUrl)
 
   return {

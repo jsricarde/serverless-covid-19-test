@@ -1,10 +1,10 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
-import { updateTodo } from '../../businessLogic/todo'
+import { updateUser } from '../../businessLogic/user'
 
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const response = await updateTodo(event);
+  const response = await updateUser(event);
 
   return {
     statusCode: 201,
