@@ -4,7 +4,7 @@ import { UserItem } from '../models/UserItem'
 import { UserUpdate } from '../models/UserUpdate'
 import { UserAccess } from '../dataLayer/userAccess'
 import { CreateUserRequest } from '../requests/CreateUserRequest'
-import { UpdateUserRequest } from '../requests/UpdateUserRequest'
+import { UpdateUserAddressRequest } from '../requests/UpdateUserAddressRequest'
 import { getUserId } from '../lambda/utils'
 
 const userAccess = new UserAccess()
@@ -21,21 +21,21 @@ export async function createUser(
 
   const userId = getUserId(event)
 
+  const status = 'pending'
   return await userAccess.createUser({
     userId,
     createdAt: (new Date()).toISOString(),
-    status: 'pending',
-    tests: [],
+    status,
     ...newUser
   })
 }
 
-export async function updateUser(event: any): Promise<UserUpdate> {
+export async function updateUserAddress(event: any): Promise<UserUpdate> {
 
-  const UserUpdate: UpdateUserRequest = JSON.parse(event.body)
+  const UserUpdate: UpdateUserAddressRequest = JSON.parse(event.body)
   const userId = getUserId(event)
 
-  return await userAccess.updateUser(userId, UserUpdate)
+  return await userAccess.updateUserAddress(userId, UserUpdate)
 }
 
 export async function deleteUser(event: any) {
@@ -51,11 +51,3 @@ export async function getUserById(userId: string) {
   return response
 }
 
-export function getUploadUrl(UserId: string) {
-  return userAccess.getUploadUrl(UserId)
-}
-
-export async function updateUrl(userId: string, url: string) {
-
-  return await userAccess.updateUrl(userId, url)
-}

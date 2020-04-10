@@ -12,7 +12,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   if (!response) {
 
-    const error = 'An internal server error happened when you tried delete a todo item.'
+    const error = 'An internal server error happened when you tried delete a user item.'
 
     logger.error(error)
 

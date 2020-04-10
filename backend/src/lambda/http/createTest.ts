@@ -1,19 +1,19 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
-import { CreateUserRequest } from '../../requests/CreateUserRequest'
+import { CreateTestRequest } from '../../requests/CreateTestRequest'
 import { createLogger } from '../../utils/logger'
-import { createUser } from '../../businessLogic/user'
+import { createTest } from '../../businessLogic/test'
 
 
 const logger = createLogger('createUser')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const newUser: CreateUserRequest = JSON.parse(event.body)
-  const userItem = await createUser(newUser, event)
+  const newTest: CreateTestRequest = JSON.parse(event.body)
+  const testItem = await createTest(newTest, event)
 
-  if (!userItem) {
+  if (!testItem) {
 
-    const error = 'An internal server error happened when you tried create a user item.'
+    const error = 'An internal server error happened when you tried create a test item.'
 
     logger.error(error)
 
@@ -32,7 +32,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*',
     },
     body: JSON.stringify({
-      item: { ...newUser }
+      item: { ...testItem }
     })
   }
 }
