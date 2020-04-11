@@ -1,6 +1,6 @@
 import React from 'react'
 import { History } from 'history'
-import { Grid, Image, Button, Icon } from 'semantic-ui-react'
+import { Table, Image, Button, Icon, Popup } from 'semantic-ui-react'
 import { getTest } from '../api/tests-api'
 
 import Auth from '../auth/Auth'
@@ -9,7 +9,7 @@ interface testUserState {
   createdAt: string
   testId: string
   resultAttachmentUrl: string
-  status: string
+  statusTest: string
   testDate: string
   isTestExist: boolean
 }
@@ -25,7 +25,7 @@ export class UserTestList extends React.PureComponent<TestUserProps, testUserSta
     createdAt: '',
     testId: '',
     resultAttachmentUrl: '',
-    status: '',
+    statusTest: '',
     testDate: '',
     isTestExist: false
   }
@@ -49,48 +49,56 @@ export class UserTestList extends React.PureComponent<TestUserProps, testUserSta
     }
   }
   render() {
-    const { status, testDate, resultAttachmentUrl, isTestExist } = this.state
+    const { statusTest, testDate, resultAttachmentUrl, isTestExist } = this.state
     const { address } = this.props
     return (isTestExist && (
-      <Grid celled>
-        <Grid.Row>
-          <Grid.Column width={3}>
-            <p>Test Date</p>
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <p>Address</p>
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <p>Status</p>
-          </Grid.Column>
-          <Grid.Column width={7}>
-            <p>Result</p>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={3}>
-            {testDate}
-          </Grid.Column>
-          <Grid.Column width={3}>
-            {address}
-            <Button
-              icon
-              color="blue"
-              onClick={() => this.onEditAddressButtonClick()}
+      <Table celled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>Test Date</Table.HeaderCell>
+            <Table.HeaderCell>Address</Table.HeaderCell>
+            <Table.HeaderCell>Result</Table.HeaderCell>
+            <Table.HeaderCell>Actions</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          <Table.Row >
+            <Table.Cell
+              negative={statusTest !== 'tested'}
+              positive={statusTest === 'tested'}>
+              {statusTest}
+            </Table.Cell>
+            <Table.Cell
+              negative={testDate === 'Pending to define'}
+              positive={testDate !== 'Pending to define'}
             >
-              <Icon name="pencil" />
-            </Button>
-          </Grid.Column>
-          <Grid.Column width={3}>
-            {status}
-          </Grid.Column>
-          <Grid.Column width={7}>
-            {resultAttachmentUrl && (
-              <Image src={resultAttachmentUrl} size="small" wrapped />
-            )}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+              {testDate}
+            </Table.Cell>
+            <Table.Cell>
+              {address}
+            </Table.Cell>
+            <Table.Cell>
+              {resultAttachmentUrl && (
+                <Image
+                  src={resultAttachmentUrl}
+                  size="medium" />
+              )}
+            </Table.Cell>
+            <Table.Cell textAlign='center'>
+
+              <Popup content='Update the user address' trigger={
+                <Button
+                  icon
+                  color="blue"
+                  onClick={() => this.onEditAddressButtonClick()}>
+                  <Icon name="address card" />
+                </Button>
+              } />
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table >
     ))
   }
 

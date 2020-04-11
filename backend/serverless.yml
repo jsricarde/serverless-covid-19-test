@@ -7,9 +7,6 @@ plugins:
   - serverless-reqvalidator-plugin
   - serverless-aws-documentation
 
-package:
-  individually: true
-
 provider:
   name: aws
   runtime: nodejs12.x

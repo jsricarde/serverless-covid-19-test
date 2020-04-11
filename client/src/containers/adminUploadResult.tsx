@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { History } from 'history'
 import { Form, Button } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
 import { getUploadUrl, uploadFile } from '../api/tests-api'
@@ -17,6 +18,7 @@ interface adminUploadResultProps {
     }
   }
   auth: Auth
+  history: History
 }
 
 interface adminUploadResultState {
@@ -60,7 +62,9 @@ export class AdminUploadResult extends React.PureComponent<
       this.setUploadState(UploadState.UploadingFile)
       await uploadFile(uploadUrl, this.state.file)
 
-      alert('File was uploaded!')
+      alert('The Result file was uploaded!')
+      this.props.history.push('/admin')
+
     } catch (e) {
       alert('Could not upload a file: ' + e.message)
     } finally {

@@ -3,6 +3,6 @@ export interface Test {
   userId: string
   createdAt: string
   resultAttachmentUrl?: string
-  status: string
+  statusTest: string
   testDate: string
 }

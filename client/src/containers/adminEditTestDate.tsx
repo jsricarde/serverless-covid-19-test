@@ -1,9 +1,9 @@
 import * as React from 'react'
+import { History } from 'history'
 import {
   Button,
   Grid,
   Input,
-  Loader
 } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
 import { updateTestDate } from '../api/tests-api'
@@ -16,6 +16,7 @@ interface AdminEditTestDateProps {
     }
   }
   auth: Auth
+  history: History
 }
 
 interface AdminEditTestDateState {
@@ -39,9 +40,9 @@ export class AdminEditTestDate extends React.PureComponent<
     try {
       const { testDate } = this.state
       const { userId, testId } = this.props.match.params
-
       const updatedUser = await updateTestDate(this.props.auth.getIdToken(), { testDate, userId, testId })
-      console.log('updatedUser', updatedUser)
+      alert('The Test Date was updated!')
+      this.props.history.push('/admin')
     } catch {
       alert('Test creation failed')
     }
