@@ -1,15 +1,16 @@
 import * as React from 'react'
+import { History } from 'history'
 import {
   Button,
   Grid,
   Input,
-  Loader
 } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
 import { updateUserAddress } from '../api/users-api'
 
 interface EditUserAdressProps {
   auth: Auth
+  history: History
 }
 
 interface EditUserAdressState {
@@ -34,7 +35,8 @@ export class EditUserAdress extends React.PureComponent<
       const { address } = this.state
 
       const updatedUser = await updateUserAddress(this.props.auth.getIdToken(), { address })
-      console.log('updatedUser', updatedUser)
+      alert('The address was updated!')
+      this.props.history.push('/')
     } catch {
       alert('Test creation failed')
     }

@@ -6,20 +6,24 @@ interface LogInProps {
   auth: Auth
 }
 
-interface LogInState {}
+interface LogInState { }
 
 export class LogIn extends React.PureComponent<LogInProps, LogInState> {
-  onLogin = () => {
-    this.props.auth.login()
+  onLogin = (role: string) => {
+    this.props.auth.login(role)
   }
 
   render() {
     return (
       <div>
-        <h1>Please log in</h1>
+        <h1>CovidTest</h1>
 
-        <Button onClick={this.onLogin} size="huge" color="olive">
-          Log in
+        <Button onClick={() => this.onLogin('normal')} size="huge" color="green">
+          Log in as a normal User
+        </Button>
+
+        <Button onClick={() => this.onLogin('admin')} size="huge" color="blue">
+          Log in as an Admin
         </Button>
       </div>
     )

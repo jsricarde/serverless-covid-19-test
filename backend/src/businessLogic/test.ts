@@ -14,13 +14,13 @@ export async function createTest(
 ): Promise<TestItem> {
   const testId = uuid.v4()
   const userId = getUserId(event)
-  const status = 'pending'
+  const statusTest = 'pending'
   return await testAccess.createTest({
     testId,
     userId,
     createdAt: newTest.createdAt,
-    status,
-    testDate: (new Date()).toISOString(),
+    statusTest,
+    testDate: 'Pending to define',
   })
 }
 

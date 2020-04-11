@@ -5,6 +5,7 @@ export default class Auth {
   accessToken;
   idToken;
   expiresAt;
+  role;
 
   auth0 = new auth0.WebAuth({
     domain: authConfig.domain,
@@ -24,10 +25,22 @@ export default class Auth {
     this.getAccessToken = this.getAccessToken.bind(this);
     this.getIdToken = this.getIdToken.bind(this);
     this.renewSession = this.renewSession.bind(this);
+    this.expiresAt = 0
   }
 
-  login() {
+  login(role) {
+    this.setRole(role)
     this.auth0.authorize();
+  }
+
+  getRole(role) {
+    const getedRole = localStorage.getItem('role')
+    this.role = getedRole
+    return getedRole
+  }
+
+  setRole(role) {
+    localStorage.setItem('role', role);
   }
 
   handleAuthentication() {
@@ -53,28 +66,28 @@ export default class Auth {
   }
 
   setSession(authResult) {
-    // Set isLoggedIn flag in localStorage
-    localStorage.setItem('isLoggedIn', 'true');
-
     // Set the time that the access token will expire at
     let expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
     this.accessToken = authResult.accessToken;
     this.idToken = authResult.idToken;
     this.expiresAt = expiresAt;
 
+    // Set isLoggedIn flag in localStorage
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('expiresAt', expiresAt);
     // navigate to the home route
-    this.history.replace('/');
+    this.getRole() === 'admin' ? this.history.replace('/admin') : this.history.replace('/')
   }
 
   renewSession() {
     this.auth0.checkSession({}, (err, authResult) => {
-       if (authResult && authResult.accessToken && authResult.idToken) {
-         this.setSession(authResult);
-       } else if (err) {
-         this.logout();
-         console.log(err);
-         alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
-       }
+      if (authResult && authResult.accessToken && authResult.idToken) {
+        this.setSession(authResult);
+      } else if (err) {
+        this.logout();
+        console.log(err);
+        alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
+      }
     });
   }
 

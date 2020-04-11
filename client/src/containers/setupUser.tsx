@@ -2,22 +2,16 @@ import dateFormat from 'dateformat'
 import { History } from 'history'
 import { createUser, getUser } from '../api/users-api'
 import { createTest } from '../api/tests-api'
-import React, { useState } from 'react';
+import React from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import { UserTestList } from '../containers/userTestList'
 import {
   Button,
-  Checkbox,
-  Divider,
   Grid,
-  Header,
-  Icon,
   Input,
-  Image,
   Loader
 } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
-import { Test } from '../types/Test'
 
 interface UserProps {
   auth: Auth
@@ -101,8 +95,7 @@ export class SetupUser extends React.PureComponent<UserProps, setupUserState> {
 
       const newUser = await createUser(this.props.auth.getIdToken(), user)
       const newTest = await createTest(this.props.auth.getIdToken(), test)
-      console.log('newUser', newUser)
-      console.log('newTest', newTest)
+      alert('Test scheduled correctly')
     } catch {
       alert('Test creation failed')
     }

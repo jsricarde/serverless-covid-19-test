@@ -1,17 +1,15 @@
 import dateFormat from 'dateformat'
 import { History } from 'history'
-import update from 'immutability-helper'
 import * as React from 'react'
 import {
   Button,
-  Checkbox,
-  Divider,
+  Popup,
   Grid,
   Header,
   Icon,
-  Input,
   Image,
-  Loader
+  Loader,
+  Table
 } from 'semantic-ui-react'
 
 import { getTests, deleteTest } from '../api/tests-api'
@@ -68,7 +66,7 @@ export class AdminTestList extends React.PureComponent<AdminTestListProps, Admin
   render() {
     return (
       <div>
-        <Header as="h1">tests</Header>
+        <Header as="h1">Test Management</Header>
 
         {this.renderTests()}
       </div>
@@ -95,44 +93,69 @@ export class AdminTestList extends React.PureComponent<AdminTestListProps, Admin
 
   renderTestsList() {
     return (
-      <Grid padded>
-        {this.state.tests.map((test, pos) => {
-          return (
-            <Grid.Row key={test.userId}>
-              <Grid.Column width={10} verticalAlign="middle">
-                {test.testId}
-              </Grid.Column>
-              <Grid.Column width={3} floated="right">
-                {test.status}
-              </Grid.Column>
-              <Grid.Column width={1} floated="right">
-                <Button
-                  icon
-                  color="blue"
-                  onClick={() => this.onEditButtonClick(test.userId, test.testId)}
+      <Table celled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Test Id</Table.HeaderCell>
+            <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>Test Date</Table.HeaderCell>
+            <Table.HeaderCell>Result</Table.HeaderCell>
+            <Table.HeaderCell>Actions</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {this.state.tests.map((test, pos) => {
+            return (
+              <Table.Row key={test.userId}>
+                <Table.Cell>{test.testId}</Table.Cell>
+                <Table.Cell
+                  negative={test.statusTest !== 'tested'}
+                  positive={test.statusTest === 'tested'}>
+                  {test.statusTest}
+                </Table.Cell>
+                <Table.Cell
+                  negative={test.testDate === 'Pending to define'}
+                  positive={test.testDate !== 'Pending to define'}
                 >
-                  <Icon name="pencil" />
-                </Button>
-              </Grid.Column>
-              <Grid.Column width={1} floated="right">
-                <Button
-                  icon
-                  color="red"
-                  onClick={() => this.onTestDelete(test.userId)}
-                >
-                  <Icon name="delete" />
-                </Button>
-              </Grid.Column>
-              {test.resultAttachmentUrl && (
-                <Image src={test.resultAttachmentUrl} size="small" wrapped />
-              )}
-              <Grid.Column width={16}>
-                <Divider />
-              </Grid.Column>
-            </Grid.Row>
-          )
-        })}
-      </Grid>
+                  {test.testDate}
+                </Table.Cell>
+                <Table.Cell>
+                  {test.resultAttachmentUrl && (
+                    <Image src={test.resultAttachmentUrl} size="small" />
+                  )}
+                </Table.Cell>
+                <Table.Cell textAlign='center'>
+                  <Popup content='Upload a test result' trigger={
+                    <Button
+                      icon
+                      color="blue"
+                      onClick={() => this.onEditButtonClick(test.userId, test.testId)}>
+                      <Icon name="cloud upload" />
+                    </Button>
+                  } />
+                  <Popup content='Update the test date' trigger={
+                    <Button
+                      icon
+                      color="blue"
+                      onClick={() => this.onEditDateButtonClick(test.userId, test.testId)}>
+                      <Icon name="calendar" />
+                    </Button>
+                  } />
+
+                  <Popup content='Delete a test' trigger={
+                    <Button
+                      icon
+                      color="red"
+                      onClick={() => this.onTestDelete(test.userId)}>
+                      <Icon name="delete" />
+                    </Button>
+                  } />
+                </Table.Cell>
+              </Table.Row>
+            )
+          })}
+        </Table.Body>
+      </Table >
     )
   }
 }

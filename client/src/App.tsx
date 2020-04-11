@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { Link, Route, Router, Switch } from 'react-router-dom'
-import { Grid, Menu, Segment } from 'semantic-ui-react'
-
 import Auth from './auth/Auth'
+import { Grid, Menu, Segment } from 'semantic-ui-react'
 import { EditUserAdress } from './containers/editUserAddress'
 import { AdminTestList } from './containers/adminTestList'
 import { AdminUploadResult } from './containers/adminUploadResult'
@@ -57,10 +56,12 @@ export default class App extends Component<AppProps, AppState> {
   }
 
   generateMenu() {
-    return (
+    const redirectTo = this.props.auth.getRole() === 'admin' ? '/admin' : '/'
+    return (this.props.auth.isAuthenticated() &&
       <Menu>
+
         <Menu.Item name="home">
-          <Link to="/">Home</Link>
+          <Link to={redirectTo}>Home</Link>
         </Menu.Item>
 
         <Menu.Menu position="right">{this.logInLogOutButton()}</Menu.Menu>
@@ -95,8 +96,15 @@ export default class App extends Component<AppProps, AppState> {
           path="/"
           exact
           render={props => {
+            return <SetupUser {...props} auth={this.props.auth} />
+          }}
+        />
+
+        <Route
+          path="/admin"
+          exact
+          render={props => {
             return <AdminTestList {...props} auth={this.props.auth} />
-            // return <SetupUser {...props} auth={this.props.auth} />
           }}
         />
 

@@ -63,10 +63,10 @@ export class TestAccess {
         testId,
         userId,
       },
-      UpdateExpression: 'set resultAttachmentUrl = :resultAttachmentUrl, status = :status',
+      UpdateExpression: 'set resultAttachmentUrl = :resultAttachmentUrl, statusTest = :statusTest',
       ExpressionAttributeValues: {
         ':resultAttachmentUrl': url,
-        ':status': 'tested'
+        ':statusTest': 'tested'
       },
       ReturnValues: "UPDATED_NEW"
     })
