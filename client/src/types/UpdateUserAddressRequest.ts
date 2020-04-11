@@ -1,3 +1,3 @@
-export interface UpdateUserAdressRequest {
+export interface UpdateUserAddressRequest {
   address: string
 }

@@ -1,7 +1,7 @@
 import { apiEndpoint } from '../config'
 import { Test } from '../types/Test';
 import { CreateUserRequest } from '../types/CreateUserRequest';
-import { UpdateUserAdressRequest } from '../types/UpdateUserAdressRequest';
+import { UpdateUserAddressRequest } from '../types/UpdateUserAddressRequest';
 
 export async function getUser(idToken: string): Promise<any> {
   console.log('idToken', idToken)
@@ -73,11 +73,11 @@ export async function createUser(
   return fetchResponse
 }
 
-export async function updateUser(
+export async function updateUserAddress(
   idToken: string,
-  updatedUser: UpdateUserAdressRequest
+  updatedUser: UpdateUserAddressRequest
 ): Promise<Test> {
-  const fetchResponse = fetch(`${apiEndpoint}/users`, {
+  const fetchResponse = fetch(`${apiEndpoint}/users/address`, {
     method: 'PUT', // or 'PUT'
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached

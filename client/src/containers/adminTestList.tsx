@@ -14,171 +14,102 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createTodo, deleteTodo, getTodos, patchTodo } from '../api/todos-api'
+import { getTests, deleteTest } from '../api/tests-api'
 import Auth from '../auth/Auth'
-import { Todo } from '../types/Todo'
+import { Test } from '../types/Test'
 
-interface TodosProps {
+interface AdminTestListState {
+  tests: Test[]
+  loadingTests: boolean
+}
+
+interface AdminTestListProps {
   auth: Auth
   history: History
 }
 
-interface TodosState {
-  todos: Todo[]
-  newTodoName: string
-  loadingTodos: boolean
-}
-
-export class Todos extends React.PureComponent<TodosProps, TodosState> {
-  state: TodosState = {
-    todos: [],
-    newTodoName: '',
-    loadingTodos: true
+export class AdminTestList extends React.PureComponent<AdminTestListProps, AdminTestListState> {
+  state: AdminTestListState = {
+    tests: [],
+    loadingTests: true
   }
 
-  handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ newTodoName: event.target.value })
+  onEditButtonClick = (userId: string, testId: string) => {
+    this.props.history.push(`/tests/${userId}/edit/${testId}`)
   }
 
-  onEditButtonClick = (todoId: string) => {
-    this.props.history.push(`/todos/${todoId}/edit`)
+  onEditDateButtonClick = (userId: string, testId: string) => {
+    this.props.history.push(`/tests/date/${userId}/edit/${testId}`)
   }
 
-  onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
+  onTestDelete = async (userId: string) => {
     try {
-      const dueDate = this.calculateDueDate()
-      const newTodo = await createTodo(this.props.auth.getIdToken(), {
-        name: this.state.newTodoName,
-        dueDate
-      })
+      await deleteTest(this.props.auth.getIdToken(), userId)
       this.setState({
-        todos: [ ...this.state.todos, newTodo ],
-        newTodoName: ''
+        tests: this.state.tests.filter(test => test.userId != userId)
       })
     } catch {
-      alert('Todo creation failed')
-    }
-  }
-
-  onTodoDelete = async (todoId: string) => {
-    try {
-      await deleteTodo(this.props.auth.getIdToken(), todoId)
-      this.setState({
-        todos: this.state.todos.filter(todo => todo.todoId != todoId)
-      })
-    } catch {
-      alert('Todo deletion failed')
-    }
-  }
-
-  onTodoCheck = async (pos: number) => {
-    try {
-      const todo = this.state.todos[ pos ]
-      await patchTodo(this.props.auth.getIdToken(), todo.todoId, {
-        name: todo.name,
-        dueDate: todo.dueDate,
-        done: !todo.done
-      })
-      this.setState({
-        todos: update(this.state.todos, {
-          [ pos ]: { done: { $set: !todo.done } }
-        })
-      })
-    } catch {
-      alert('Todo deletion failed')
+      alert('test deletion failed')
     }
   }
 
   async componentDidMount() {
     try {
-      const todos = await getTodos(this.props.auth.getIdToken())
+      const tests = await getTests(this.props.auth.getIdToken())
       this.setState({
-        todos,
-        loadingTodos: false
+        tests,
+        loadingTests: false
       })
     } catch (e) {
-      alert(`Failed to fetch todos: ${e.message}`)
+      alert(`Failed to fetch tests: ${e.message}`)
     }
   }
 
   render() {
     return (
       <div>
-        <Header as="h1">TODOs</Header>
+        <Header as="h1">tests</Header>
 
-        {this.renderCreateTodoInput()}
-
-        {this.renderTodos()}
+        {this.renderTests()}
       </div>
     )
   }
 
-  renderCreateTodoInput() {
-    return (
-      <Grid.Row>
-        <Grid.Column width={16}>
-          <Input
-            action={{
-              color: 'teal',
-              labelPosition: 'left',
-              icon: 'add',
-              content: 'New task',
-              onClick: this.onTodoCreate
-            }}
-            fluid
-            actionPosition="left"
-            placeholder="To change the world..."
-            onChange={this.handleNameChange}
-          />
-        </Grid.Column>
-        <Grid.Column width={16}>
-          <Divider />
-        </Grid.Column>
-      </Grid.Row>
-    )
-  }
-
-  renderTodos() {
-    if (this.state.loadingTodos) {
+  renderTests() {
+    if (this.state.loadingTests) {
       return this.renderLoading()
     }
 
-    return this.renderTodosList()
+    return this.renderTestsList()
   }
 
   renderLoading() {
     return (
       <Grid.Row>
         <Loader indeterminate active inline="centered">
-          Loading TODOs
+          Loading tests
         </Loader>
       </Grid.Row>
     )
   }
 
-  renderTodosList() {
+  renderTestsList() {
     return (
       <Grid padded>
-        {this.state.todos.map((todo, pos) => {
+        {this.state.tests.map((test, pos) => {
           return (
-            <Grid.Row key={todo.todoId}>
-              <Grid.Column width={1} verticalAlign="middle">
-                <Checkbox
-                  onChange={() => this.onTodoCheck(pos)}
-                  checked={todo.done}
-                />
-              </Grid.Column>
+            <Grid.Row key={test.userId}>
               <Grid.Column width={10} verticalAlign="middle">
-                {todo.name}
+                {test.testId}
               </Grid.Column>
               <Grid.Column width={3} floated="right">
-                {todo.dueDate}
+                {test.status}
               </Grid.Column>
               <Grid.Column width={1} floated="right">
                 <Button
                   icon
                   color="blue"
-                  onClick={() => this.onEditButtonClick(todo.todoId)}
+                  onClick={() => this.onEditButtonClick(test.userId, test.testId)}
                 >
                   <Icon name="pencil" />
                 </Button>
@@ -187,13 +118,13 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                 <Button
                   icon
                   color="red"
-                  onClick={() => this.onTodoDelete(todo.todoId)}
+                  onClick={() => this.onTestDelete(test.userId)}
                 >
                   <Icon name="delete" />
                 </Button>
               </Grid.Column>
-              {todo.attachmentUrl && (
-                <Image src={todo.attachmentUrl} size="small" wrapped />
+              {test.resultAttachmentUrl && (
+                <Image src={test.resultAttachmentUrl} size="small" wrapped />
               )}
               <Grid.Column width={16}>
                 <Divider />
@@ -203,13 +134,6 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         })}
       </Grid>
     )
-  }
-
-  calculateDueDate(): string {
-    const date = new Date()
-    date.setDate(date.getDate() + 7)
-
-    return dateFormat(date, 'yyyy-mm-dd') as string
   }
 }
 

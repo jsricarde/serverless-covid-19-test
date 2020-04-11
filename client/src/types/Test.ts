@@ -1,6 +1,8 @@
 export interface Test {
+  testId: string
   userId: string
   createdAt: string
-  attachmentUrl?: string
-  result: boolean
+  resultAttachmentUrl?: string
+  status: string
+  testDate: string
 }

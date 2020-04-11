@@ -3,10 +3,12 @@ import { Link, Route, Router, Switch } from 'react-router-dom'
 import { Grid, Menu, Segment } from 'semantic-ui-react'
 
 import Auth from './auth/Auth'
-import { EditTodo } from './components/EditTodo'
+import { EditUserAdress } from './containers/editUserAddress'
+import { AdminTestList } from './containers/adminTestList'
+import { AdminUploadResult } from './containers/adminUploadResult'
+import { AdminEditTestDate } from './containers/adminEditTestDate'
 import { LogIn } from './components/LogIn'
 import { NotFound } from './components/NotFound'
-import { Todos } from './components/Todos'
 import { SetupUser } from './containers/setupUser'
 
 export interface AppProps { }
@@ -93,17 +95,42 @@ export default class App extends Component<AppProps, AppState> {
           path="/"
           exact
           render={props => {
-            return <SetupUser {...props} auth={this.props.auth} />
+            return <AdminTestList {...props} auth={this.props.auth} />
+            // return <SetupUser {...props} auth={this.props.auth} />
           }}
         />
 
-        {/* <Route
-          path="/todos/:todoId/edit"
+        <Route
+          path="/user/address/edit"
           exact
           render={props => {
-            return <EditTodo {...props} auth={this.props.auth} />
+            return <EditUserAdress {...props} auth={this.props.auth} />
           }}
-        /> */}
+        />
+
+        <Route
+          path="/user/admin"
+          exact
+          render={props => {
+            return <AdminTestList {...props} auth={this.props.auth} />
+          }}
+        />
+
+        <Route
+          path="/tests/:userId/edit/:testId"
+          exact
+          render={props => {
+            return <AdminUploadResult {...props} auth={this.props.auth} />
+          }}
+        />
+
+        <Route
+          path="/tests/date/:userId/edit/:testId"
+          exact
+          render={props => {
+            return <AdminEditTestDate {...props} auth={this.props.auth} />
+          }}
+        />
 
         <Route component={NotFound} />
       </Switch>

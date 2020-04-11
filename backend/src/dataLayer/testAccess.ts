@@ -5,7 +5,6 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 const XAWS = AWSXRay.captureAWS(AWS)
 
 import { TestItem } from '../models/TestItem'
-// import { UserUpdate } from '../models/UserUpdate'
 
 export class TestAccess {
 
@@ -13,8 +12,16 @@ export class TestAccess {
     private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly testsTable = process.env.TEST_TABLE,
     private readonly bucket = process.env.S3_BUCKET,
-    private readonly signedUrlExpiration = process.env.SIGNED_URL_EXPIRATION
   ) {
+  }
+
+  async getAllTests(): Promise<TestItem[]> {
+    const result = await this.docClient.scan({
+      TableName: this.testsTable
+    }).promise()
+
+    const items = result.Items
+    return items as TestItem[]
   }
 
   async createTest(TestItem: TestItem): Promise<TestItem> {
@@ -28,32 +35,60 @@ export class TestAccess {
     return TestItem
   }
 
-  getUploadUrl(UserId: string) {
+  async deleteTest(userId: string) {
+    const response = await this.docClient.delete({
+      TableName: this.testsTable,
+      Key: {
+        userId,
+      }
+    }).promise()
+
+    return response
+  }
+
+  getUploadUrl(testId: string) {
     const s3 = new XAWS.S3({ signatureVersion: 'v4' })
 
     return s3.getSignedUrl('putObject', {
       Bucket: this.bucket,
-      Key: UserId,
-      Expires: this.signedUrlExpiration
+      Key: testId,
+      Expires: 90000
     })
   }
 
-  async updateUrl(userId: string, url: string) {
+  async updateUrl(testId: string, userId: string, url: string) {
     return await this.docClient.update({
       TableName: this.testsTable,
-
       Key: {
+        testId,
         userId,
       },
-      UpdateExpression: 'set resultAttachmentUrl = :resultAttachmentUrl',
+      UpdateExpression: 'set resultAttachmentUrl = :resultAttachmentUrl, status = :status',
       ExpressionAttributeValues: {
-        ':resultAttachmentUrl': url
+        ':resultAttachmentUrl': url,
+        ':status': 'tested'
       },
       ReturnValues: "UPDATED_NEW"
     })
       .promise()
   }
 
+
+  async updateDate(testId: string, userId: string, testDate: string) {
+    return await this.docClient.update({
+      TableName: this.testsTable,
+      Key: {
+        testId,
+        userId,
+      },
+      UpdateExpression: 'set testDate = :testDate',
+      ExpressionAttributeValues: {
+        ':testDate': testDate
+      },
+      ReturnValues: "UPDATED_NEW"
+    })
+      .promise()
+  }
 }
 
 function createDynamoDBClient() {
