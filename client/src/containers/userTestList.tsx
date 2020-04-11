@@ -1,5 +1,6 @@
 import React from 'react'
-import { Grid, Image } from 'semantic-ui-react'
+import { History } from 'history'
+import { Grid, Image, Button, Icon } from 'semantic-ui-react'
 import { getTest } from '../api/tests-api'
 
 import Auth from '../auth/Auth'
@@ -16,6 +17,7 @@ interface testUserState {
 interface TestUserProps {
   auth: Auth,
   address: string
+  history: History
 }
 
 export class UserTestList extends React.PureComponent<TestUserProps, testUserState> {
@@ -26,6 +28,10 @@ export class UserTestList extends React.PureComponent<TestUserProps, testUserSta
     status: '',
     testDate: '',
     isTestExist: false
+  }
+
+  onEditAddressButtonClick = () => {
+    this.props.history.push('/user/address/edit')
   }
 
   async componentDidMount() {
@@ -67,6 +73,13 @@ export class UserTestList extends React.PureComponent<TestUserProps, testUserSta
           </Grid.Column>
           <Grid.Column width={3}>
             {address}
+            <Button
+              icon
+              color="blue"
+              onClick={() => this.onEditAddressButtonClick()}
+            >
+              <Icon name="pencil" />
+            </Button>
           </Grid.Column>
           <Grid.Column width={3}>
             {status}

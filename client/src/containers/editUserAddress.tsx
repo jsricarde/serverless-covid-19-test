@@ -6,7 +6,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
-import { updateUser } from '../api/users-api'
+import { updateUserAddress } from '../api/users-api'
 
 interface EditUserAdressProps {
   auth: Auth
@@ -33,7 +33,7 @@ export class EditUserAdress extends React.PureComponent<
     try {
       const { address } = this.state
 
-      const updatedUser = await updateUser(this.props.auth.getIdToken(), { address })
+      const updatedUser = await updateUserAddress(this.props.auth.getIdToken(), { address })
       console.log('updatedUser', updatedUser)
     } catch {
       alert('Test creation failed')

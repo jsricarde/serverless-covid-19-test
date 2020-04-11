@@ -1,12 +1,14 @@
 import { apiEndpoint } from '../config'
 import { Test } from '../types/Test';
 import { CreateTestRequest } from '../types/CreateTestRequest';
+import { UpdateTestDateRequest } from '../types/UpdateTestDateRequest';
+import Axios from 'axios'
 
 export async function getTest(idToken: string): Promise<any> {
   console.log('Fetching test', `${apiEndpoint}/test`)
   console.log('idToken', idToken)
 
-  const fetchResponse = fetch(`${apiEndpoint}/user`, {
+  const fetchResponse = fetch(`${apiEndpoint}/test`, {
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     credentials: 'same-origin', // include, *same-origin, omit
@@ -26,10 +28,7 @@ export async function getTest(idToken: string): Promise<any> {
 }
 
 export async function getTests(idToken: string): Promise<any> {
-  console.log('Fetching test', `${apiEndpoint}/tests`)
-  console.log('idToken', idToken)
-
-  const fetchResponse = fetch(`${apiEndpoint}/users`, {
+  const fetchResponse = fetch(`${apiEndpoint}/tests`, {
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     credentials: 'same-origin', // include, *same-origin, omit
@@ -74,15 +73,81 @@ export async function createTest(
   return fetchResponse
 }
 
-// export async function patchTodo(
-//   idToken: string,
-//   todoId: string,
-//   updatedTodo: UpdateTodoRequest
-// ): Promise<void> {
-//   await Axios.patch(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': `Bearer ${idToken}`
-//     }
-//   })
-// }
+export async function deleteTest(
+  idToken: string,
+  userId: string
+): Promise<void> {
+  const fetchResponse = fetch(`${apiEndpoint}/tests/user/${userId}`, {
+    method: 'DELETE', // or 'PUT'
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    }
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return data
+    });
+  return fetchResponse
+}
+
+export async function getUploadUrl(
+  idToken: string,
+  userId: string,
+  testId: string
+): Promise<string> {
+  const fetchResponse = await fetch(`${apiEndpoint}/tests/${testId}/attachment`, {
+    method: 'POST', // or 'PUT'
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    },
+    body: JSON.stringify({ userId })
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log('data', data);
+      return data
+    });
+  return fetchResponse.resultAttachmentUrl
+}
+
+export async function uploadFile(resultAttachmentUrl: string, file: Buffer): Promise<void> {
+  await Axios.put(resultAttachmentUrl, file)
+}
+
+export async function updateTestDate(
+  idToken: string,
+  updatedTest: UpdateTestDateRequest
+): Promise<Test> {
+  const fetchResponse = fetch(`${apiEndpoint}/tests/date`, {
+    method: 'PUT', // or 'PUT'
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    },
+    body: JSON.stringify(updatedTest)
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log('test updated', data);
+      return data
+    });
+  return fetchResponse
+}

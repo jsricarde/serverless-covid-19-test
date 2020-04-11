@@ -55,6 +55,7 @@ export class SetupUser extends React.PureComponent<UserProps, setupUserState> {
         this.setState({
           ...user,
           isUserCreated: true,
+          loadingUser: false,
         })
       }
 
@@ -120,6 +121,7 @@ export class SetupUser extends React.PureComponent<UserProps, setupUserState> {
               placeholder="User Name"
               onChange={this.handleNameChange}
               value={this.state.name}
+              disabled={this.state.isUserCreated}
             />
             <br />
             <Input
@@ -127,6 +129,7 @@ export class SetupUser extends React.PureComponent<UserProps, setupUserState> {
               placeholder="Phone number"
               onChange={this.handlePhoneChange}
               value={this.state.phone}
+              disabled={this.state.isUserCreated}
             />
             <br />
             <Input
@@ -134,6 +137,7 @@ export class SetupUser extends React.PureComponent<UserProps, setupUserState> {
               placeholder="Email"
               onChange={this.handleEmailChange}
               value={this.state.email}
+              disabled={this.state.isUserCreated}
             />
             <br />
             <Input
@@ -141,6 +145,7 @@ export class SetupUser extends React.PureComponent<UserProps, setupUserState> {
               placeholder="Address"
               onChange={this.handleAddressChange}
               value={this.state.address}
+              disabled={this.state.isUserCreated}
             />
             <br />
             <Button onClick={() => this.onScheduleTest()} disabled={this.state.isUserCreated}>
@@ -148,7 +153,7 @@ export class SetupUser extends React.PureComponent<UserProps, setupUserState> {
             </Button>
           </Grid.Column>
         </Grid.Row>
-        <UserTestList auth={this.props.auth} address={this.state.address} />
+        <UserTestList auth={this.props.auth} address={this.state.address} history={this.props.history} />
       </div>
     )
   }
