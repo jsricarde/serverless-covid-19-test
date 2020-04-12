@@ -5,6 +5,9 @@ import { TestAccess } from '../dataLayer/testAccess'
 import { CreateTestRequest } from '../requests/CreateTestRequest'
 import { UpdateTestDateRequest } from '../requests/UpdateTestDateRequest'
 import { getUserId } from '../lambda/utils'
+// import { createLogger } from '../utils/logger'
+
+// const logger = createLogger('test')
 
 const testAccess = new TestAccess()
 
@@ -29,9 +32,20 @@ export async function getAllTests(): Promise<TestItem[]> {
 }
 
 export async function deleteTest(event: any) {
-  const { userId } = event.pathParameters
+  const test = await getTest(event);
+  const userId = decodeURI(event.pathParameters.userId)
+  const { testId } = test
+  // logger.info(userId)
+  // logger.info(test)
+  // logger.info(testId)
 
-  return await testAccess.deleteTest(userId)
+  return await testAccess.deleteTest(userId, testId)
+}
+
+export async function getTest(event: any) {
+  const userId = decodeURI(event.pathParameters.userId)
+
+  return await testAccess.getTest(userId)
 }
 
 export function getUploadUrl(testId: string) {

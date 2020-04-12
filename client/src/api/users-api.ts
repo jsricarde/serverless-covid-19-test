@@ -1,5 +1,5 @@
 import { apiEndpoint } from '../config'
-import { Test } from '../types/Test';
+import { User } from '../types/User';
 import { CreateUserRequest } from '../types/CreateUserRequest';
 import { UpdateUserAddressRequest } from '../types/UpdateUserAddressRequest';
 
@@ -51,7 +51,9 @@ export async function getUsers(idToken: string): Promise<any> {
 export async function createUser(
   idToken: string,
   newUser: CreateUserRequest
-): Promise<Test> {
+): Promise<User> {
+  console.log('newUser', newUser)
+  newUser.status = "pending"
   const fetchResponse = fetch(`${apiEndpoint}/users`, {
     method: 'POST', // or 'PUT'
     mode: 'cors', // no-cors, *cors, same-origin
@@ -76,7 +78,7 @@ export async function createUser(
 export async function updateUserAddress(
   idToken: string,
   updatedUser: UpdateUserAddressRequest
-): Promise<Test> {
+): Promise<User> {
   const fetchResponse = fetch(`${apiEndpoint}/users/address`, {
     method: 'PUT', // or 'PUT'
     mode: 'cors', // no-cors, *cors, same-origin
@@ -93,6 +95,30 @@ export async function updateUserAddress(
     })
     .then((data) => {
       console.log('user updated', data);
+      return data
+    });
+  return fetchResponse
+}
+
+export async function deleteUser(
+  idToken: string,
+  userId: string
+): Promise<void> {
+  const fetchResponse = fetch(`${apiEndpoint}/users/${userId}`, {
+    method: 'DELETE', // or 'PUT'
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    }
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
       return data
     });
   return fetchResponse

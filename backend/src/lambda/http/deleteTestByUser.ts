@@ -1,16 +1,14 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { deleteUser } from '../../businessLogic/user'
+// import { deleteUser } from '../../businessLogic/user'
 import { deleteTest } from '../../businessLogic/test'
 import { createLogger } from '../../utils/logger'
 
 const logger = createLogger('createTodo')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const responseUser = await deleteUser(event)
   const responseTest = await deleteTest(event)
 
-  logger.info(responseUser);
   logger.info(responseTest);
 
   if (!responseTest) {
