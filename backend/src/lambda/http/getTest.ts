@@ -6,7 +6,7 @@ import { getUserId } from '../../lambda/utils'
 const docClient = new AWS.DynamoDB.DocumentClient()
 
 const testsTable = process.env.TEST_TABLE
-const userIdIndex = process.env.USER_ID_INDEX
+const userIdIndex = process.env.TEST_ID_INDEX
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const userId = getUserId(event)
@@ -20,13 +20,23 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     }
   }).promise()
 
-  if (result.Count !== 0) {
+  if (result.Count > 0) {
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify(result.Items[ 0 ])
+    }
+  }
+
+  else if (result.Count === 0) {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({})
     }
   }
 

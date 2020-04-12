@@ -6,6 +6,9 @@ import { UserAccess } from '../dataLayer/userAccess'
 import { CreateUserRequest } from '../requests/CreateUserRequest'
 import { UpdateUserAddressRequest } from '../requests/UpdateUserAddressRequest'
 import { getUserId } from '../lambda/utils'
+import { createLogger } from '../utils/logger'
+
+const logger = createLogger('deleteUser')
 
 const userAccess = new UserAccess()
 
@@ -39,7 +42,8 @@ export async function updateUserAddress(event: any): Promise<UserUpdate> {
 }
 
 export async function deleteUser(event: any) {
-  const { userId } = event.pathParameters
+  const userId = decodeURI(event.pathParameters.userId)
+  logger.info(userId)
 
   return await userAccess.deleteUser(userId)
 }

@@ -15,9 +15,7 @@ After that you need to configure [AWS-CLI]:
 ```
 pip3 install awscli
 ```
-
 And configure the SSH from your AWS account:
-
 ```
 aws configure
 AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
@@ -34,6 +32,20 @@ Configure serverless to use the AWS credentials you just set up:
 ```
 sls config credentials --provider aws --key YOUR_ACCESS_KEY --secret YOUR_SECRET_KEY --profile serverless
 ```
+## Testing with my Auth0 and AWS setup(Udacity Reviewers)
+ You only need to import the [postman collection] I already have some users and test created:
+ **Important:** Each userId has a testId. The current variables setted in the postman collection are associated with Auth0 [my token] there are the first in the table.
+
+| testId | userId | In Use |
+| ------ | ------ | ------ |
+| `4ba700d6-ca07-42d5-987d-3719c3ac4663` | `google-oauth2|111841458144185665545` | setted in postman
+| `46c79150-592e-4bf5-9c7f-192b33e3c448` | `auth0|5e92d27954c3220c6976a364` |
+
+And I provided an [covid-test] file for the upload feature.
+
+### Postman Collection
+You can import this [postman collection] to view the endpoints used in the app.
+
 
 ## Setup client side (Auth0 info and AWS ApiId)
 You need to add your auth0 config data and your apiId from AWS in the client [config.ts]:
@@ -85,11 +97,6 @@ See the client running locally
 http://localhost:3000
 ```
 
-### Postman Collection
-You can import this [postman collection] to view the endpoints used in the app
-Note: You need to cofigure some application variable in the [postman collection]:
-![Alt text](screenshots/postman-variables.PNG?raw=true "Setup variables")
-
 ### Evidences of the stack running in AWS
 You can see a series of [screenshots] of the stack running in my AWS account
 
@@ -100,7 +107,11 @@ You can see a series of [screenshots] of the stack running in my AWS account
 
 [serverless.yml]: <https://github.com/jsricarde/serverless-covid-19-test/blob/master/backend/serverless.yml>
 
+[my token]: <https://github.com/jsricarde/serverless-covid-19-test/blob/master/myToken.txt>
+
 [screenshots]: <https://github.com/jsricarde/serverless-covid-19-test/blob/master/screenshots>
+
+[covid-test]: <https://github.com/jsricarde/serverless-covid-19-test/blob/master/convid-test.png>
 
 [postman collection]: <https://github.com/jsricarde/serverless-covid-19-test/blob/master/backend/covid-test.postman_collection.json>
 

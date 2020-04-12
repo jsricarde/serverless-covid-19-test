@@ -39,6 +39,7 @@ export class UserAccess {
   }
 
   async deleteUser(userId: string) {
+    console.log('userId', userId)
     const response = await this.docClient.delete({
       TableName: this.usersTable,
       Key: {

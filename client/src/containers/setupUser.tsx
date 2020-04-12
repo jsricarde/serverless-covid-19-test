@@ -45,11 +45,13 @@ export class SetupUser extends React.PureComponent<UserProps, setupUserState> {
   async componentDidMount() {
     try {
       const user = await getUser(this.props.auth.getIdToken())
+      this.setState({
+        loadingUser: false,
+      })
       if ('createdAt' in user) {
         this.setState({
           ...user,
           isUserCreated: true,
-          loadingUser: false,
         })
       }
 

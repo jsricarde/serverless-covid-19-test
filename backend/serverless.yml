@@ -19,9 +19,10 @@ provider:
   region: ${opt:region, 'us-east-1'}
 
   environment:
-    USER_TABLE: c19-users-${self:provider.stage}
-    TEST_TABLE: c19-tests-${self:provider.stage}
+    USER_TABLE: c19-user-${self:provider.stage}
+    TEST_TABLE: c19-test-${self:provider.stage}
     USER_ID_INDEX: UserIdIndex
+    TEST_ID_INDEX: TestIdIndex
     S3_BUCKET: c19-bucket-sricarde-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 90000
 
@@ -281,7 +282,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TEST_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TEST_TABLE}/index/${self:provider.environment.TEST_ID_INDEX}
       - Effect: "Allow" # xray permissions (required)
         Action:
           - "xray:PutTraceSegments"
@@ -314,7 +315,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TEST_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TEST_TABLE}/index/${self:provider.environment.TEST_ID_INDEX}
       - Effect: "Allow" # xray permissions (required)
         Action:
           - "xray:PutTraceSegments"
@@ -322,8 +323,8 @@ functions:
         Resource:
           - "*"
 
-  DeleteTest:
-    handler: src/lambda/http/deleteTest.handler
+  DeleteTestByUser:
+    handler: src/lambda/http/deleteTestByUser.handler
     events:
       - http:
           method: delete
@@ -343,7 +344,14 @@ functions:
         Action:
           - dynamodb:DeleteItem
           - dynamodb:Delete
+          - dynamodb:GetItem
+          - dynamodb:Query
+          - dynamodb:Scan
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TEST_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TEST_TABLE}/index/${self:provider.environment.TEST_ID_INDEX}
       - Effect: "Allow" # xray permissions (required)
         Action:
           - "xray:PutTraceSegments"
@@ -435,7 +443,7 @@ resources:
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TEST_TABLE}
         GlobalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.USER_ID_INDEX}
+          - IndexName: ${self:provider.environment.TEST_ID_INDEX}
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH

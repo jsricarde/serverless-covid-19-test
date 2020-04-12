@@ -22,7 +22,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n \"userId\": \"TODO: Fill this with an exitent userId\"\n}",
+					"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@gmail.com\",\n  \"address\": \"Street 15\",\n  \"phone\": \"142121212\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -30,7 +30,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/tests/{{testId}}/attachment",
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/users",
 					"protocol": "https",
 					"host": [
 						"{{apiId}}",
@@ -41,9 +41,7 @@
 					],
 					"path": [
 						"{{env}}",
-						"tests",
-						"{{testId}}",
-						"attachment"
+						"users"
 					]
 				}
 			},
@@ -250,7 +248,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n \"userId\": \"TODO: Fill this with an exitent userId\"\n}",
+					"raw": "{\n \"userId\": \"google-oauth2|111841458144185665545\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -272,6 +270,93 @@
 						"tests",
 						"{{testId}}",
 						"attachment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a test by user id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/tests/user/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{env}}",
+						"tests",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/users/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{env}}",
+						"users",
+						"{{userId}}"
 					]
 				}
 			},
@@ -302,27 +387,33 @@
 	],
 	"variable": [
 		{
-			"id": "fd131acb-e9b4-48d5-afef-4c207b2ac9ff",
+			"id": "749056d0-73e6-4aef-91de-a87ee8fe433c",
 			"key": "apiId",
 			"value": "ewwzt3l0o8",
 			"type": "string"
 		},
 		{
-			"id": "c24caff4-73bb-4fdf-a221-7371a4b85665",
+			"id": "8f9e6e79-32b8-48fd-bfd7-94a02e6c4a32",
 			"key": "env",
 			"value": "dev",
 			"type": "string"
 		},
 		{
-			"id": "42d67217-2dc1-4ad9-b7ee-bd057150ee6a",
+			"id": "8071fca7-d72c-4b8e-9526-ba5a65d0e4a1",
 			"key": "authToken",
 			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik9EazFOVGs1UmtJMk1qTkNNamhETjBRelJEZEdNakEzTnpreE56ZzJNelUxUVRrMFFrWXhOdyJ9.eyJpc3MiOiJodHRwczovL3NyaWNhcmRlLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDExMTg0MTQ1ODE0NDE4NTY2NTU0NSIsImF1ZCI6IjBOUGV1M3czcHA3bWFCNGo1WnZSd0VSRDlxRGR0U0hEIiwiaWF0IjoxNTg2MzE5OTQ1LCJleHAiOjE1ODYzNTU5NDUsImF0X2hhc2giOiIzVVFiRDJ0aENmVU1LbDl6TzBWT2F3Iiwibm9uY2UiOiJlWk1rQjdNNjk0SlhGWnZmdEtQUTBWSGk5NFhGSUJsaSJ9.lYh-XB_1bohcnPReVVpuN6AVZ6AqusuAzDzA_bTKobDiGRtkAT6ErBZoYON7JtpmMMe5e70DGVcgBL5nR2OQjgCGa_MStCI5rnzmNce4zFbTerVbYknVwgCNSSDoMKx_q7GwfG_5wsZZUq78QwiIYYBzRHESYw5isDLaIiiLPT594bOg4hP4KN09wkVC7TYYQxTJJ4CChS53Du1nnFGTf-oVhr49gnhz2j30IOdO1prm555KaV2naDeLaBKGBdTHumcXDnEPTb4xI6bJWv2uFEJuvdauyj4WbZlvV3PZcWI14uLMrhHgxBCxM30ScRuYHBjhmTd6fR_XoTZKp_OeCw",
 			"type": "string"
 		},
 		{
-			"id": "ce6af5b3-d73f-45e6-8094-c336ad69f76e",
+			"id": "591e221c-0583-488c-8419-560590e1a6c0",
 			"key": "testId",
-			"value": "TODO",
+			"value": "ae678b73-d225-4861-8f14-71040aaeeedf",
+			"type": "string"
+		},
+		{
+			"id": "e0b0bfd9-459e-4f5e-902f-df06c175153c",
+			"key": "userId",
+			"value": "google-oauth2|111841458144185665545",
 			"type": "string"
 		}
 	],

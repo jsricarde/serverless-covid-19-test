@@ -13,6 +13,7 @@ import {
 } from 'semantic-ui-react'
 
 import { getTests, deleteTest } from '../api/tests-api'
+import { deleteUser } from '../api/users-api'
 import Auth from '../auth/Auth'
 import { Test } from '../types/Test'
 
@@ -43,6 +44,7 @@ export class AdminTestList extends React.PureComponent<AdminTestListProps, Admin
   onTestDelete = async (userId: string) => {
     try {
       await deleteTest(this.props.auth.getIdToken(), userId)
+      // await deleteUser(this.props.auth.getIdToken(), userId)
       this.setState({
         tests: this.state.tests.filter(test => test.userId != userId)
       })
