@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "f1337291-05d3-4dc9-9cd2-586471e89e72",
+		"name": "covid-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"userId\": \"TODO: Fill this with an exitent userId\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/tests/{{testId}}/attachment",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{env}}",
+						"tests",
+						"{{testId}}",
+						"attachment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a list of users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/users",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{env}}",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/user",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{env}}",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a test",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"createdAt\": \"2020-04-09T17:51:11.001Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/tests",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{env}}",
+						"tests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a test",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/test",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{env}}",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update an user address",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"address\": \"Calle 16sur\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/users/address",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{env}}",
+						"users",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a attachment URL for a test",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"userId\": \"TODO: Fill this with an exitent userId\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/{{env}}/tests/{{testId}}/attachment",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{env}}",
+						"tests",
+						"{{testId}}",
+						"attachment"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "827037e2-1704-4202-ac50-efd3da3d4f80",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "15174428-7600-44de-8b77-343db96c08c7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "fd131acb-e9b4-48d5-afef-4c207b2ac9ff",
+			"key": "apiId",
+			"value": "ewwzt3l0o8",
+			"type": "string"
+		},
+		{
+			"id": "c24caff4-73bb-4fdf-a221-7371a4b85665",
+			"key": "env",
+			"value": "dev",
+			"type": "string"
+		},
+		{
+			"id": "42d67217-2dc1-4ad9-b7ee-bd057150ee6a",
+			"key": "authToken",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik9EazFOVGs1UmtJMk1qTkNNamhETjBRelJEZEdNakEzTnpreE56ZzJNelUxUVRrMFFrWXhOdyJ9.eyJpc3MiOiJodHRwczovL3NyaWNhcmRlLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDExMTg0MTQ1ODE0NDE4NTY2NTU0NSIsImF1ZCI6IjBOUGV1M3czcHA3bWFCNGo1WnZSd0VSRDlxRGR0U0hEIiwiaWF0IjoxNTg2MzE5OTQ1LCJleHAiOjE1ODYzNTU5NDUsImF0X2hhc2giOiIzVVFiRDJ0aENmVU1LbDl6TzBWT2F3Iiwibm9uY2UiOiJlWk1rQjdNNjk0SlhGWnZmdEtQUTBWSGk5NFhGSUJsaSJ9.lYh-XB_1bohcnPReVVpuN6AVZ6AqusuAzDzA_bTKobDiGRtkAT6ErBZoYON7JtpmMMe5e70DGVcgBL5nR2OQjgCGa_MStCI5rnzmNce4zFbTerVbYknVwgCNSSDoMKx_q7GwfG_5wsZZUq78QwiIYYBzRHESYw5isDLaIiiLPT594bOg4hP4KN09wkVC7TYYQxTJJ4CChS53Du1nnFGTf-oVhr49gnhz2j30IOdO1prm555KaV2naDeLaBKGBdTHumcXDnEPTb4xI6bJWv2uFEJuvdauyj4WbZlvV3PZcWI14uLMrhHgxBCxM30ScRuYHBjhmTd6fR_XoTZKp_OeCw",
+			"type": "string"
+		},
+		{
+			"id": "ce6af5b3-d73f-45e6-8094-c336ad69f76e",
+			"key": "testId",
+			"value": "TODO",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
