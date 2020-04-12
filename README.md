@@ -36,10 +36,10 @@ sls config credentials --provider aws --key YOUR_ACCESS_KEY --secret YOUR_SECRET
  You only need to import the [postman collection] I already have some users and test created:
  **Important:** Each userId has a testId. The current variables setted in the postman collection are associated with Auth0 [my token] there are the first in the table.
 
-| testId | userId | In Use |
-| ------ | ------ | ------ |
-| `4ba700d6-ca07-42d5-987d-3719c3ac4663` | `google-oauth2|111841458144185665545` | setted in postman
-| `46c79150-592e-4bf5-9c7f-192b33e3c448` | `auth0|5e92d27954c3220c6976a364` |
+
+testId: `4ba700d6-ca07-42d5-987d-3719c3ac4663`  userId: `google-oauth2|111841458144185665545`  **setted in postman**
+
+testId: `46c79150-592e-4bf5-9c7f-192b33e3c448`  userId: `auth0|5e92d27954c3220c6976a364`
 
 And I provided an [covid-test] file for the upload feature.
 
